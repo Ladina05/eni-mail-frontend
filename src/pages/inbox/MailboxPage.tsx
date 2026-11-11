@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type MouseEvent } from 'react'
 import { Archive, ArrowDown, ArrowUp, FileText, Inbox, Mail, Search, Send, Star, Trash2 } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { EmptyState } from '../../components/common/EmptyState'
 import { IconButton } from '../../components/common/IconButton'
 import { MessageDrawer } from '../../components/email/MessageDrawer'
@@ -19,6 +19,7 @@ const meta: Record<MailFolder, { title: string; caption: string; icon: typeof In
 
 export function MailboxPage({ folder }: { folder: MailFolder }) {
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
   const showToast = useToast()
   const info = meta[folder]
   const Icon = info.icon
@@ -37,6 +38,11 @@ export function MailboxPage({ folder }: { folder: MailFolder }) {
     get<MailMessage[]>(info.endpoint).then((result) => { if (active) { setMessages(result); setError('') } }).catch((failure) => { if (active) setError(errorMessage(failure)) })
     return () => { active = false }
   }, [info.endpoint])
+  useEffect(() => {
+    const id = searchParams.get('message')
+    if (!id || folder !== 'inbox') return
+    get<MailMessage>(`/messages/${id}`).then((message) => { setSelected({ folder, message }); setSearchParams({}) }).catch(() => setSearchParams({}))
+  }, [folder, searchParams, setSearchParams])
   const filtered = useMemo(() => messages.filter((message) => `${message.subject} ${message.body} ${message.senderName} ${message.senderEmail}`.toLowerCase().includes(query.toLowerCase())), [messages, query])
   async function toggleStar(event: MouseEvent, message: MailMessage) {
     event.stopPropagation()
@@ -51,7 +57,7 @@ export function MailboxPage({ folder }: { folder: MailFolder }) {
   }
   function openMessage(message: MailMessage) {
     if (folder === 'drafts') navigate('/compose', { state: { draft: message } })
-    else setSelected({ folder, message })
+    else get<MailMessage>(`/messages/${message.id}`).then((detail) => setSelected({ folder, message: detail })).catch((failure) => showToast(errorMessage(failure), 'error'))
   }
   async function quickAction(event: MouseEvent, message: MailMessage, action: string) {
     event.stopPropagation(); setBusy(true)
