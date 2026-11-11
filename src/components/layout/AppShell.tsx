@@ -13,6 +13,21 @@ export function AppShell() {
   const refreshUnread = () => get<{count:number}>('/messages/unread-count').then((x) => setUnread(x.count)).catch(() => undefined)
   const refreshNotificationCount = () => get<{count:number}>('/notifications/unread-count').then((x) => setNotificationCount(x.count)).catch(() => undefined)
   useEffect(() => { void refreshUnread(); void refreshNotificationCount(); const timer = setInterval(() => { void refreshUnread(); void refreshNotificationCount() }, 30000); return () => clearInterval(timer) }, [])
+  useEffect(() => {
+    const refresh = () => void refreshUnread()
+    window.addEventListener('eni-mail:unread-changed', refresh)
+    return () => window.removeEventListener('eni-mail:unread-changed', refresh)
+  }, [])
+  useEffect(() => {
+    const closeModalOnBackdrop = (event: MouseEvent) => {
+      const target = event.target
+      if (!(target instanceof HTMLElement) || !target.classList.contains('drawer-backdrop')) return
+      const closeButton = target.querySelector<HTMLElement>(':scope > .profile-sheet > .icon-button')
+      closeButton?.click()
+    }
+    document.addEventListener('mousedown', closeModalOnBackdrop)
+    return () => document.removeEventListener('mousedown', closeModalOnBackdrop)
+  }, [])
   async function toggleNotifications() { const next = !notificationsOpen; setNotificationsOpen(next); if (next) { const items = await get<NotificationItem[]>('/notifications').catch(() => []); setNotifications(items); setNotificationCount(items.filter((item) => !item.read).length) } }
   async function openNotification(item: NotificationItem) { try { await patch(`/notifications/${item.id}/read`); await remove(`/notifications/${item.id}`); setNotifications((items) => items.filter((x) => x.id !== item.id)); if (!item.read) setNotificationCount((x) => Math.max(0, x - 1)); setNotificationsOpen(false); navigate(item.messageId ? `/inbox?message=${item.messageId}` : '/inbox') } catch {} }
   async function deleteNotification(event: React.MouseEvent, item: NotificationItem) { event.stopPropagation(); await remove(`/notifications/${item.id}`).catch(() => undefined); setNotifications((items) => items.filter((x) => x.id !== item.id)); if (!item.read) setNotificationCount((x) => Math.max(0, x - 1)) }

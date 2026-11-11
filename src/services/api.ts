@@ -42,3 +42,8 @@ export function upload<T>(path: string, file: File) {
   body.append('file', file)
   return request<T>(path, { method: 'POST', body })
 }
+
+export function apiUrl(path: string) {
+  const backendBase = API_BASE.replace(/\/api\/?$/, '')
+  return path.startsWith('/api/') ? `${backendBase}${path}` : `${API_BASE}${path}`
+}
