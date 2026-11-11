@@ -41,7 +41,7 @@ export function MailboxPage({ folder }: { folder: MailFolder }) {
   useEffect(() => {
     const id = searchParams.get('message')
     if (!id || folder !== 'inbox') return
-    get<MailMessage>(`/messages/${id}`).then((message) => { setSelected({ folder, message }); setSearchParams({}) }).catch(() => setSearchParams({}))
+    get<MailMessage>(`/messages/${id}`).then((message) => { setSelected({ folder, message }); window.dispatchEvent(new Event('eni-mail:unread-changed')); setSearchParams({}) }).catch(() => setSearchParams({}))
   }, [folder, searchParams, setSearchParams])
   const filtered = useMemo(() => messages.filter((message) => `${message.subject} ${message.body} ${message.senderName} ${message.senderEmail}`.toLowerCase().includes(query.toLowerCase())), [messages, query])
   async function toggleStar(event: MouseEvent, message: MailMessage) {
@@ -57,7 +57,7 @@ export function MailboxPage({ folder }: { folder: MailFolder }) {
   }
   function openMessage(message: MailMessage) {
     if (folder === 'drafts') navigate('/compose', { state: { draft: message } })
-    else get<MailMessage>(`/messages/${message.id}`).then((detail) => setSelected({ folder, message: detail })).catch((failure) => showToast(errorMessage(failure), 'error'))
+    else get<MailMessage>(`/messages/${message.id}`).then((detail) => { setSelected({ folder, message: detail }); window.dispatchEvent(new Event('eni-mail:unread-changed')) }).catch((failure) => showToast(errorMessage(failure), 'error'))
   }
   async function quickAction(event: MouseEvent, message: MailMessage, action: string) {
     event.stopPropagation(); setBusy(true)

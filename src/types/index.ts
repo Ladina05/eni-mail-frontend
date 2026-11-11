@@ -20,11 +20,12 @@ export interface User {
   institutionalResponsibility: string | null
   staffPosition: string | null
   studentNumber: string | null
+  profilePhotoUrl: string | null
 }
 
 export interface AuthResponse { token: string; user: User }
 export interface Attachment { id: string; originalName: string; contentType: string; size: number; uploadedAt: string }
-export interface MailMessage { id: string; subject: string; body: string; senderEmail: string; senderName: string; sentAt: string | null; read: boolean; starred: boolean; archived: boolean; draft: boolean; attachments: Attachment[] }
+export interface MailMessage { id: string; subject: string; body: string; senderEmail: string; senderName: string; senderProfilePhotoUrl: string | null; sentAt: string | null; read: boolean; starred: boolean; archived: boolean; draft: boolean; attachments: Attachment[] }
 export interface MailGroup { id: string; name: string; description: string | null; createdByEmail: string; createdAt: string }
 export interface Department { id: string; name: string; description?: string | null }
 export interface Promotion { id: string; name: string; description?: string | null }

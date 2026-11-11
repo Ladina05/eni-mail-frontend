@@ -23,5 +23,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem('eni-mail-user')
     setUser(null)
   }
-  return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>
+  function updateUser(nextUser: User) {
+    localStorage.setItem('eni-mail-user', JSON.stringify(nextUser))
+    setUser(nextUser)
+  }
+  return <AuthContext.Provider value={{ user, login, logout, updateUser }}>{children}</AuthContext.Provider>
 }
