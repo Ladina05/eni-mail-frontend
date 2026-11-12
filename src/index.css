@@ -45,7 +45,8 @@ h1, h2 { font-family: Georgia, 'Times New Roman', serif; font-weight: 500; lette
 .sidebar { position: fixed; z-index: 20; inset: 0 auto 0 0; width: 248px; display: flex; flex-direction: column; padding: 23px 15px 14px; border-right: 1px solid var(--border); background: #fbfcf9; }
 .brand-row { display: flex; align-items: center; justify-content: space-between; padding: 0 7px; }
 .brand-mark { display: inline-flex; align-items: center; gap: 10px; }
-.brand-symbol { width: 33px; height: 33px; display: inline-grid; place-items: center; border-radius: 8px 8px 8px 2px; background: var(--green); color: white; }
+.brand-symbol { width: 33px; height: 33px; display: inline-grid; place-items: center; border-radius: 8px 8px 8px 2px; background: #fff url('/logo.png') center / contain no-repeat; color: white; overflow: hidden; }
+.brand-symbol svg { display: none; }
 .brand-name { color: var(--ink); font-size: 21px; font-weight: 800; letter-spacing: 0; }
 .brand-name span { color: var(--green); font-weight: 500; }
 .compose-link { min-height: 43px; display: flex; align-items: center; justify-content: center; gap: 9px; margin: 33px 1px 31px; border-radius: 4px; background: var(--green); color: white; font-size: 13px; font-weight: 700; transition: background .15s ease; }
@@ -104,8 +105,9 @@ h1, h2 { font-family: Georgia, 'Times New Roman', serif; font-weight: 500; lette
 
 /* Login */
 .login-screen { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(420px, .98fr); background: var(--paper); }
-.login-left { min-height: 100vh; position: relative; overflow: hidden; display: flex; flex-direction: column; padding: 34px 8.3%; background: #e7eee6; }
-.login-left::before { position: absolute; inset: 0; background: radial-gradient(ellipse at 82% 18%, #d0e0d1 0, transparent 40%), linear-gradient(145deg, transparent 56%, #d2e2d7 56%, #d2e2d7 56.15%, transparent 56.15%); content: ''; }
+.login-left { min-height: 100vh; position: relative; isolation: isolate; overflow: hidden; display: flex; flex-direction: column; padding: 34px 8.3%; background: #173d31; }
+.login-left::before { position: absolute; z-index: -2; inset: -18px; background: url('/enibg.png') center / cover no-repeat; filter: blur(3px); transform: scale(1.04); content: ''; }
+.login-left::after { position: absolute; z-index: -1; inset: 0; background: linear-gradient(135deg, #e7eee6dc, #c9ded1c9); content: ''; }
 .login-brand { position: relative; z-index: 1; display: flex; align-items: center; gap: 10px; }
 .login-brand .brand-name { font-size: 23px; }
 .login-copy { position: relative; z-index: 1; max-width: 510px; margin: auto 0; padding: 56px 0 70px; animation: fade-up .55s both; }
@@ -117,7 +119,7 @@ h1, h2 { font-family: Georgia, 'Times New Roman', serif; font-weight: 500; lette
 .login-orbit { position: absolute; border: 1px solid #aebfb1; border-radius: 50%; opacity: .42; }
 .orbit-one { width: 310px; height: 310px; right: -113px; top: 20%; }
 .orbit-two { width: 220px; height: 220px; right: -68px; top: calc(20% + 45px); }
-.login-right { min-height: 100vh; display: flex; flex-direction: column; padding: 34px 9%; }
+.login-right { min-height: 100vh; display: flex; flex-direction: column; padding: 34px 9%; background: radial-gradient(ellipse at 82% 18%, #d0e0d1 0, transparent 40%), linear-gradient(145deg, transparent 56%, #d2e2d7 56%, #d2e2d7 56.15%, transparent 56.15%), #e7eee6; }
 .login-topline { display: flex; align-items: center; justify-content: space-between; color: #77827d; font-size: 11px; }
 .help-link { display: flex; align-items: center; gap: 4px; color: var(--green); font-weight: 650; }
 .login-form { width: min(390px, 100%); margin: auto; padding: 48px 0; animation: fade-up .55s .08s both; }
@@ -318,6 +320,10 @@ h1, h2 { font-family: Georgia, 'Times New Roman', serif; font-weight: 500; lette
 .profile-photo-preview { display: flex; justify-content: center; margin: 24px 0; }
 .profile-photo-preview .avatar { width: 150px; height: 150px; font-size: 42px; }
 .profile-photo-modal-actions { display: flex; justify-content: center; gap: 10px; }
+.password-input, .password-field { position: relative; display: flex; align-items: center; width: 100%; }
+.password-input input, .password-field input { width: 100%; padding-right: 42px; }
+.password-toggle { position: absolute; right: 9px; display: grid; width: 28px; height: 28px; place-items: center; padding: 0; border: 0; background: transparent; color: #718077; cursor: pointer; }
+.admin-user-form > .form-control:nth-of-type(4) { display: none; }
 .profile-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px; }
 .profile-fields > div { min-height: 69px; display: grid; align-content: center; gap: 7px; border-bottom: 1px solid #eff1ee; }
 .profile-fields span { display: flex; align-items: center; gap: 7px; color: #8b9690; font-size: 10px; }
@@ -473,4 +479,10 @@ h1, h2 { font-family: Georgia, 'Times New Roman', serif; font-weight: 500; lette
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+.brand-logo {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
 }
