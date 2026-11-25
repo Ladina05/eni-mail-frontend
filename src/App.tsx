@@ -4,6 +4,8 @@ import { ToastProvider } from './contexts/ToastContext'
 import { ProtectedRoute } from './routes/ProtectedRoute'
 import { AppShell } from './components/layout/AppShell'
 import { LoginPage } from './pages/auth/LoginPage'
+import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage'
+import { ResetPasswordPage } from './pages/auth/ResetPasswordPage'
 import { DashboardPage } from './pages/dashboard/DashboardPage'
 import { MailboxPage } from './pages/inbox/MailboxPage'
 import { ComposePage } from './pages/inbox/ComposePage'
@@ -17,6 +19,8 @@ import { AdminPage } from './pages/admin/AdminPage'
 export default function App() {
   return <AuthProvider><ToastProvider><BrowserRouter><Routes>
     <Route path="/login" element={<LoginPage />} />
+    <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+    <Route path="/reset-password" element={<ResetPasswordPage />} />
     <Route element={<ProtectedRoute />}><Route element={<AppShell />}>
       <Route index element={<DashboardPage />} />
       <Route path="inbox" element={<MailboxPage folder="inbox" />} />
