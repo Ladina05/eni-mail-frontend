@@ -1,0 +1,11 @@
+import { useState, type FormEvent } from 'react'
+import { ArrowLeft, ArrowRight, Mail } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { post } from '../../services/api'
+import { errorMessage } from '../../utils/format'
+
+export function ForgotPasswordPage() {
+  const [email, setEmail] = useState(''); const [busy, setBusy] = useState(false); const [error, setError] = useState(''); const [success, setSuccess] = useState('')
+  async function submit(event: FormEvent) { event.preventDefault(); setBusy(true); setError(''); try { const result = await post<{ message: string }>('/auth/forgot-password', { email }); setSuccess(result.message) } catch (e) { setError(errorMessage(e)) } finally { setBusy(false) } }
+  return <main className="login-screen"><section className="login-left"><div className="login-brand"><span className="brand-symbol" /><span className="brand-name">eni<span>mail</span></span></div><div className="login-copy"><span className="eyebrow">SÉCURITÉ DU COMPTE</span><h1>Retrouvez<br />votre <em>accès.</em></h1><p>Nous vous enverrons un lien sécurisé pour choisir un nouveau mot de passe.</p></div><div className="login-foot"><span>ÉCOLE NATIONALE D’INFORMATIQUE</span><span>Fianarantsoa · Madagascar</span></div></section><section className="login-right"><div className="login-topline"><Link to="/login" className="help-link"><ArrowLeft size={14} />Connexion</Link></div><form className="login-form" onSubmit={(e) => void submit(e)}><div className="login-title"><span className="eyebrow">MOT DE PASSE OUBLIÉ</span><h2>Réinitialiser l’accès</h2><p>Indiquez l’adresse e-mail associée à votre compte ENI Mail.</p></div><label className="field-label" htmlFor="forgot-email">Adresse e-mail</label><div className="input-with-icon"><Mail size={17} /><input id="forgot-email" required autoComplete="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="nom@eni.mg" /></div>{error && <div className="form-error" role="alert">{error}</div>}{success && <div className="form-success" role="status">{success}</div>}<button className="button button-primary login-submit" disabled={busy}>{busy ? 'Envoi…' : 'Envoyer le lien'}<ArrowRight size={17} /></button></form><div className="login-bottom">© {new Date().getFullYear()} ENI · Tous droits réservés</div></section></main>
+}

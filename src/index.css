@@ -132,6 +132,10 @@ h1, h2 { font-family: Georgia, 'Times New Roman', serif; font-weight: 500; lette
 .input-with-icon input { width: 100%; min-width: 0; border: 0; outline: 0; color: var(--ink); font-size: 12px; }
 .input-with-icon input::placeholder { color: #a7afaa; }
 .form-error { margin-top: 12px; padding: 10px 12px; border-left: 3px solid var(--coral); background: #fbefec; color: #a74135; font-size: 11px; line-height: 1.5; }
+.form-success { margin-top: 12px; padding: 10px 12px; border-left: 3px solid var(--green); background: #edf6ef; color: #24593f; font-size: 11px; line-height: 1.5; }
+.form-success a { color: var(--green); font-weight: 700; text-decoration: underline; }
+.forgot-password-link { display: block; width: max-content; margin: 11px 0 -7px auto; color: var(--green); font-size: 11px; font-weight: 700; }
+.forgot-password-link:hover { text-decoration: underline; }
 .login-submit { width: 100%; min-height: 45px; justify-content: space-between; margin-top: 24px; padding: 0 15px; }
 .login-security { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 17px 0 0; color: #8c9791; font-size: 10px; }
 .login-bottom { margin-top: auto; padding-top: 20px; color: #929c96; font-size: 10px; text-align: center; }
@@ -485,4 +489,120 @@ h1, h2 { font-family: Georgia, 'Times New Roman', serif; font-weight: 500; lette
   width: 42px;
   height: 42px;
   object-fit: contain;
+}
+/* Cartes des statistiques */
+.stat-block {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 20px;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.stat-block:hover {
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+}
+
+/* Panneaux du dashboard */
+.section-panel {
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 24px;
+  background: transparent;
+}
+
+/* Grid des statistiques */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+/* Grid des panneaux */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 20px;
+}
+
+/* Grid des panneaux */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 20px;
+  align-items: stretch;
+}
+
+/* Hauteur identique et fixe */
+.dashboard-grid .section-panel {
+  height: 450px;
+  min-height: 450px;
+  max-height: 450px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 24px;
+  background: transparent;
+}
+
+/* Grid principal */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 20px;
+  align-items: stretch;
+}
+
+/* Panneaux */
+.dashboard-grid .section-panel {
+  height: 450px;
+  min-height: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: transparent;
+}
+
+/* Titres fixes */
+.section-heading,
+.account-panel > .eyebrow,
+.account-avatar,
+.account-panel > h2,
+.account-panel > p {
+  flex-shrink: 0;
+}
+
+/* Scroll du contenu des messages */
+.recent-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* Scroll du contenu du compte */
+.account-panel dl {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* Style scrollbar */
+.recent-list::-webkit-scrollbar,
+.account-panel dl::-webkit-scrollbar {
+  width: 5px;
+}
+
+.recent-list::-webkit-scrollbar-thumb,
+.account-panel dl::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
 }
