@@ -1,3 +1,5 @@
-import { MailboxPage } from '../inbox/MailboxPage'
+import { MailboxPage } from "../inbox/MailboxPage";
 
-export function DraftsPage() { return <MailboxPage folder="drafts" /> }
+export function DraftsPage() {
+  return <MailboxPage folder="drafts" />;
+}

@@ -1,3 +1,5 @@
-import { ComposeForm } from '../../components/email/ComposeForm'
+import { ComposeForm } from "../../components/email/ComposeForm";
 
-export function ComposePage() { return <ComposeForm /> }
+export function ComposePage() {
+  return <ComposeForm />;
+}

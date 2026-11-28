@@ -1,3 +1,5 @@
-import { MailboxPage } from '../inbox/MailboxPage'
+import { MailboxPage } from "../inbox/MailboxPage";
 
-export function SentPage() { return <MailboxPage folder="sent" /> }
+export function SentPage() {
+  return <MailboxPage folder="sent" />;
+}
