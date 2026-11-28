@@ -5,12 +5,14 @@ import {
   Download,
   MailOpen,
   Paperclip,
+  Reply,
   Star,
   Trash2,
   Undo2,
   X,
 } from "lucide-react";
 import { useToast } from "../../hooks/useToast";
+import { useNavigate } from "react-router-dom";
 import { patch } from "../../services/api";
 import type { MailFolder, MailMessage } from "../../types";
 import { errorMessage, formatDate } from "../../utils/format";
@@ -31,6 +33,7 @@ export function MessageDrawer({
   onChanged: () => void;
 }) {
   const toast = useToast();
+  const navigate = useNavigate();
   const sent = folder === "sent";
   async function act(action: string, success: string) {
     try {
@@ -79,6 +82,24 @@ export function MessageDrawer({
               <ArrowLeft size={18} />
             </IconButton>
             <div className="drawer-actions">
+              {!sent && folder !== "trash" && (
+                <IconButton
+                  label="Répondre"
+                  onClick={() =>
+                    navigate("/compose", {
+                      state: {
+                        replyTo: {
+                          senderEmail: message.senderEmail,
+                          senderName: message.senderName,
+                          subject: message.subject,
+                        },
+                      },
+                    })
+                  }
+                >
+                  <Reply size={17} />
+                </IconButton>
+              )}
               {!sent && folder !== "trash" && (
                 <IconButton
                   label="Lu / non lu"

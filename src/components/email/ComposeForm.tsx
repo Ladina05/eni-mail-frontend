@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Select, { type MultiValue } from "react-select";
 import { ArrowLeft, Paperclip, Send, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useToast } from "../../hooks/useToast";
 import { get, post, upload } from "../../services/api";
 import type {
@@ -15,6 +15,11 @@ import type {
 } from "../../types";
 import { errorMessage } from "../../utils/format";
 type Option = { value: string; label: string };
+type ReplyDetails = {
+  senderEmail: string;
+  senderName: string;
+  subject: string;
+};
 const pathLabels: Record<AcademicPath, string> = {
   SOFTWARE_ENGINEERING_DATABASES: "GB",
   SYSTEMS_NETWORKS_ADMINISTRATION: "ASR",
@@ -38,12 +43,30 @@ const pathsByMention: Record<AcademicMention, AcademicPath[]> = {
 };
 export function ComposeForm() {
   const navigate = useNavigate();
+  const location = useLocation();
   const toast = useToast();
-  const [subject, setSubject] = useState("");
+  const replyTo = (location.state as { replyTo?: ReplyDetails } | null)?.replyTo;
+  const replySubject = replyTo?.subject.trim() || "(Sans objet)";
+  const [subject, setSubject] = useState(() =>
+    replyTo
+      ? /^re\s*:/i.test(replySubject)
+        ? replySubject
+        : `Re: ${replySubject}`
+      : "",
+  );
   const [body, setBody] = useState("");
   const [users, setUsers] = useState<User[]>([]);
   const [groups, setGroups] = useState<MailGroup[]>([]);
-  const [recipients, setRecipients] = useState<Option[]>([]);
+  const [recipients, setRecipients] = useState<Option[]>(() =>
+    replyTo
+      ? [
+          {
+            value: replyTo.senderEmail,
+            label: `${replyTo.senderName} — ${replyTo.senderEmail}`,
+          },
+        ]
+      : [],
+  );
   const [group, setGroup] = useState("");
   const [studentFilters, setStudentFilters] = useState(false);
   const [level, setLevel] = useState<StudyLevel | "">("");
@@ -143,7 +166,7 @@ export function ComposeForm() {
   return (
     <div className="compose-page">
       <div className="page-heading compose-heading">
-        <h1>Nouveau message</h1>
+        <h1>{replyTo ? "Répondre au message" : "Nouveau message"}</h1>
         <button
           type="button"
           className="button button-quiet"
