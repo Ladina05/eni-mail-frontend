@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import { ToastProvider } from './contexts/ToastContext'
+import { ConfirmProvider } from './contexts/ConfirmContext'
 import { ProtectedRoute } from './routes/ProtectedRoute'
 import { AppShell } from './components/layout/AppShell'
 import { LoginPage } from './pages/auth/LoginPage'
@@ -17,7 +18,7 @@ import { ProfilePage } from './pages/profile/ProfilePage'
 import { AdminPage } from './pages/admin/AdminPage'
 
 export default function App() {
-  return <AuthProvider><ToastProvider><BrowserRouter><Routes>
+  return <AuthProvider><ToastProvider><ConfirmProvider><BrowserRouter><Routes>
     <Route path="/login" element={<LoginPage />} />
     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
     <Route path="/reset-password" element={<ResetPasswordPage />} />
@@ -35,5 +36,5 @@ export default function App() {
       <Route path="admin" element={<AdminPage />} />
     </Route></Route>
     <Route path="*" element={<Navigate to="/" replace />} />
-  </Routes></BrowserRouter></ToastProvider></AuthProvider>
+  </Routes></BrowserRouter></ConfirmProvider></ToastProvider></AuthProvider>
 }

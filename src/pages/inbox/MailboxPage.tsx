@@ -5,6 +5,7 @@ import { EmptyState } from '../../components/common/EmptyState'
 import { IconButton } from '../../components/common/IconButton'
 import { MessageDrawer } from '../../components/email/MessageDrawer'
 import { useToast } from '../../hooks/useToast'
+import { useConfirm } from '../../hooks/useConfirm'
 import { get, patch, remove } from '../../services/api'
 import type { MailFolder, MailMessage } from '../../types'
 import { errorMessage, formatDate } from '../../utils/format'
@@ -21,6 +22,7 @@ export function MailboxPage({ folder }: { folder: MailFolder }) {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const showToast = useToast()
+  const confirm = useConfirm()
   const info = meta[folder]
   const Icon = info.icon
   const [messages, setMessages] = useState<MailMessage[]>([])
@@ -51,7 +53,7 @@ export function MailboxPage({ folder }: { folder: MailFolder }) {
   }
   async function deleteDraft(event: MouseEvent, message: MailMessage) {
     event.stopPropagation()
-    if (!window.confirm('Supprimer définitivement ce brouillon ?')) return
+    if (!await confirm('Supprimer définitivement ce brouillon ?', { destructive: true, confirmLabel: 'Supprimer' })) return
     try { await remove(`/messages/drafts/${message.id}`); setMessages((items) => items.filter((item) => item.id !== message.id)); showToast('Brouillon supprimé.') }
     catch (failure) { showToast(errorMessage(failure), 'error') }
   }
@@ -67,12 +69,12 @@ export function MailboxPage({ folder }: { folder: MailFolder }) {
   }
   async function permanentlyDelete(event: MouseEvent, message: MailMessage) {
     event.stopPropagation()
-    if (!window.confirm('Supprimer définitivement ce message de votre corbeille ?')) return
+    if (!await confirm('Supprimer définitivement ce message de votre corbeille ?', { destructive: true, confirmLabel: 'Supprimer' })) return
     try { await remove(`/messages/${message.id}/permanent`); await load(); showToast('Message supprimé définitivement.') }
     catch (failure) { showToast(errorMessage(failure), 'error') }
   }
   async function emptyTrash() {
-    if (!window.confirm('Vider définitivement votre corbeille ?')) return
+    if (!await confirm('Vider définitivement votre corbeille ?', { destructive: true, confirmLabel: 'Vider la corbeille' })) return
     try { await remove('/messages/trash'); await load(); showToast('Corbeille vidée.') }
     catch (failure) { showToast(errorMessage(failure), 'error') }
   }
