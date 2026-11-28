@@ -1,4 +1,6 @@
-import { createContext } from 'react'
+import { createContext } from "react";
 
-export type ToastTone = 'success' | 'error'
-export const ToastContext = createContext<((message: string, tone?: ToastTone) => void) | null>(null)
+export type ToastTone = "success" | "error";
+export const ToastContext = createContext<
+  ((message: string, tone?: ToastTone) => void) | null
+>(null);
